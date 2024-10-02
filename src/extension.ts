@@ -15,15 +15,17 @@ export function activate(context: vscode.ExtensionContext) {
         const classNames = extractClassNames(documentText)
 
         if (classNames.length === 0) {
-            vscode.window.showInformationMessage("No class names found.")
+            vscode.window.showInformationMessage("找不到类名")
             return
         }
 
+        /** 生成less文件内容 */
         const lessContent = generateLessContent(classNames)
-        const lessFileName = editor.document.fileName.replace(/\.tsx$/, ".less")
+        /** 生成less文件名称 */
+        const lessFileName = editor.document.fileName.replace(/\.tsx$/, ".module.less")
 
         await vscode.workspace.fs.writeFile(vscode.Uri.file(lessFileName), Buffer.from(lessContent, "utf8"))
-        vscode.window.showInformationMessage(`LESS file created: ${lessFileName}`)
+        vscode.window.showInformationMessage(`LESS文件生成完毕: ${lessFileName}`)
     })
 
     context.subscriptions.push(disposable)
