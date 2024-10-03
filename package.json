@@ -3,6 +3,7 @@
     "displayName": "DcdCss",
     "description": "为dcd css开发提升效率的小工具",
     "version": "0.3.0",
+    "icon": "image/icon.png",
     "engines": {
         "vscode": "^1.93.0"
     },
