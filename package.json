@@ -2,7 +2,7 @@
     "name": "dcdcss",
     "displayName": "DcdCss",
     "description": "一款为css module开发提升效率的小工具",
-    "version": "0.3.3",
+    "version": "0.3.4",
     "icon": "image/icon.png",
     "engines": {
         "vscode": "^1.93.0"
