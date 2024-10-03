@@ -1,7 +1,7 @@
 {
     "name": "dcdcss",
     "displayName": "DcdCss",
-    "description": "为dcd css开发提升效率的小工具",
+    "description": "一款为css module开发提升效率的小工具",
     "version": "0.3.1",
     "icon": "image/icon.png",
     "engines": {

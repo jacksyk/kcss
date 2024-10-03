@@ -1,9 +1,19 @@
-# Change Log
+## 0.1.0
 
-All notable changes to the "kcss" extension will be documented in this file.
+增加提取 tsx 类名能力
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## 0.2.0
 
-## [Unreleased]
+增加校验 less 文件能力
 
-- Initial release
+## 0.3.0
+
+增加 snippet 能力
+
+## 0.3.1
+
+修正 icon 图片
+
+## 0.3.2
+
+修正描述
