@@ -4,7 +4,7 @@
     "description": "为dcd css开发提升效率的小工具",
     "version": "0.0.1",
     "engines": {
-        "vscode": "^1.93.0"
+        "vscode": "^1.20.0"
     },
     "publisher": "shuyikang",
     "categories": [
@@ -17,8 +17,29 @@
             {
                 "command": "extension.extractCssClasses",
                 "title": "Extract CSS Classes to LESS"
+            },
+            {
+                "command": "extension.extractCssClasses",
+                "title": "一键提取css类"
             }
-        ]
+        ],
+        "menus": {
+            "editor/context": [
+                {
+                    "when": "editorFocus",
+                    "command": "extension.extractCssClasses",
+                    "alt": "一键提取css类",
+                    "group": ""
+                }
+            ],
+            "explorer/context": [
+                {
+                    "command": "extension.extractCssClasses",
+                    "alt": "一键提取css类",
+                    "group": ""
+                }
+            ]
+        }
     },
     "scripts": {
         "vscode:prepublish": "npm run package",

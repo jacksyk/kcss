@@ -4,9 +4,14 @@ import path from "path"
 import * as vscode from "vscode"
 import { curPath } from "../contants/path"
 /** 匹配文本中的类名 */
-function extractClassNames(text: string): string[] {
-    const regex = /className\s*=\s*{\s*styles\.(\w+)\s*}/g // 匹配 className={styles.xxx} 的正则表达式
+// /className\s*=\s*{\s*styles\.(\w+)\s*}/g
+// /classNames*=s*{s*styles.(w+)s*}/g
+// /className\s*=\s*{\s*styles\.(\w+)\s*}/g // 注意双重转义字符
+function extractClassNames(text: string, token: string = "styles"): string[] {
+    let str = `className\\s*=\\s*{\\s*${token}\\.(\\w+)\\s*}` // 匹配 className={styles.xxx} 的正则表达式
+    let regex: RegExp = new RegExp(str, "g")
     // 读取less文件内容
+    console.log("regex", regex)
     let lessFileContent: string = ""
     // ensureFileSync(curPath) // todo： 保证这块一定有文件
     try {
@@ -27,8 +32,6 @@ function extractClassNames(text: string): string[] {
             }
         })
     }
-
-    console.log("classNames", classNames)
 
     return Array.from(classNames)
 }
