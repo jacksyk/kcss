@@ -4,7 +4,7 @@
     "description": "为dcd css开发提升效率的小工具",
     "version": "0.1.0",
     "engines": {
-        "vscode": "^1.20.0"
+        "vscode": "^1.93.0"
     },
     "publisher": "shuyikang",
     "categories": [
