@@ -17,6 +17,10 @@
             {
                 "command": "extension.extractCssClasses",
                 "title": "Extract CSS Classes to LESS"
+            },
+            {
+                "command": "extension.verifyCss",
+                "title": "Verify CSS"
             }
         ],
         "menus": {
