@@ -2,18 +2,19 @@ import * as vscode from "vscode"
 import extractClassNames from "./util/extract-class-name"
 import generateLessContent from "./util/generate-less-content"
 import extractImportName from "./util/extract-import-name"
+import getShowToast from "./config/show-toast"
 import fs from "fs-extra"
 export function activate(context: vscode.ExtensionContext) {
     console.log("插件已经被激活")
 
     let disposable = vscode.commands.registerCommand("extension.extractCssClasses", async () => {
         const editor = vscode.window.activeTextEditor
+        const isShowToast = getShowToast()
 
         if (!editor || editor.document.languageId !== "typescriptreact") {
             vscode.window.showWarningMessage("请打开一个tsx的文件,目前只支持tsx文件👌👌👌")
             return
         }
-
         const documentText = editor.document.getText()
 
         /** 获取当前引用的css module名称 */
@@ -30,7 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
         }
 
         if (classNames.length === 0) {
-            vscode.window.showInformationMessage("类名存在、暂无变动😺😺😺")
+            if (isShowToast) {
+                vscode.window.showInformationMessage("类名存在、暂无变动😺😺😺")
+            }
             return
         }
 
@@ -45,7 +48,9 @@ export function activate(context: vscode.ExtensionContext) {
             flag: "a", // 文件追加
         })
 
-        vscode.window.showInformationMessage(`LESS文件更新完毕🎊🎊🎊`)
+        if (isShowToast) {
+            vscode.window.showInformationMessage(`LESS文件更新完毕🎊🎊🎊`)
+        }
     })
 
     context.subscriptions.push(disposable)
