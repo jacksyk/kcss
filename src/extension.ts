@@ -1,5 +1,7 @@
 import * as vscode from "vscode"
-import fs from "fs"
+import extractClassNames from "./util/extract-class-name"
+import generateLessContent from "./util/generate-less-content"
+import fs from "fs-extra"
 export function activate(context: vscode.ExtensionContext) {
     console.log("插件已经被激活")
 
@@ -7,15 +9,24 @@ export function activate(context: vscode.ExtensionContext) {
         const editor = vscode.window.activeTextEditor
 
         if (!editor || editor.document.languageId !== "typescriptreact") {
-            vscode.window.showWarningMessage("请打开一个tsx的文件")
+            vscode.window.showWarningMessage("请打开一个tsx的文件,目前只支持tsx文件👌👌👌")
             return
         }
 
         const documentText = editor.document.getText()
-        const classNames = extractClassNames(documentText)
+        const selection = editor.selection
+        const selectedText = editor.document.getText(selection) // 获取当前选中的文本
+
+        /** 如果选择了内容，则生成内容那部分，没有选择内容的话，则默认全部生成 */
+        let classNames: string[] = []
+        if (selectedText.length === 0) {
+            classNames = extractClassNames(documentText)
+        } else {
+            classNames = extractClassNames(selectedText)
+        }
 
         if (classNames.length === 0) {
-            vscode.window.showInformationMessage("找不到类名")
+            vscode.window.showInformationMessage("类名都存在，不需要更新😃😃😃")
             return
         }
 
@@ -24,30 +35,16 @@ export function activate(context: vscode.ExtensionContext) {
         /** 生成less文件名称 */
         const lessFileName = editor.document.fileName.replace(/\.tsx$/, ".module.less")
 
-        await vscode.workspace.fs.writeFile(vscode.Uri.file(lessFileName), Buffer.from(lessContent, "utf8"))
-        vscode.window.showInformationMessage(`LESS文件生成完毕: ${lessFileName}`)
+        // await vscode.workspace.fs.writeFile(vscode.Uri.file(lessFileName), Buffer.from(lessContent, "utf8"))
+        await fs.writeFile(lessFileName, lessContent, {
+            encoding: "utf8",
+            flag: "a", // 文件追加
+        })
+        vscode.window.showInformationMessage(`LESS文件更新完毕🎊🎊🎊`)
     })
 
     context.subscriptions.push(disposable)
 }
 
-function extractClassNames(text: string): string[] {
-    // const classRegex = /className="([^"]*)"/g
-    const regex = /className\s*=\s*{\s*styles\.(\w+)\s*}/g // 匹配 className={styles.xxx} 的正则表达式
-
-    const classNames: Set<string> = new Set()
-    let match
-
-    while ((match = regex.exec(text)) !== null) {
-        match[1].split(" ").forEach((cls) => classNames.add(cls))
-    }
-
-    return Array.from(classNames)
-}
-
-/** 生成less文件的内容 */
-function generateLessContent(classNames: string[]): string {
-    return classNames.map((cls) => `.${cls} {\n  // Add styles for ${cls}\n}`).join("\n\n")
-}
 // This method is called when your extension is deactivated
 export function deactivate() {}
