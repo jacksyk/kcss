@@ -2,7 +2,7 @@
     "name": "dcdcss",
     "displayName": "DcdCss",
     "description": "为dcd css开发提升效率的小工具",
-    "version": "0.0.1",
+    "version": "0.1.0",
     "engines": {
         "vscode": "^1.20.0"
     },
