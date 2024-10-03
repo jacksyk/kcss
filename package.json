@@ -63,7 +63,7 @@
         "snippets": [
             {
                 "language": "less",
-                "path": "./src/snippets/color.json"
+                "path": "./snippets/color.json"
             }
         ]
     },
