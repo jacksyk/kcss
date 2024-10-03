@@ -58,7 +58,13 @@
                     "default": true
                 }
             }
-        }
+        },
+        "snippets": [
+            {
+                "language": "less",
+                "path": "./src/snippets/color.json"
+            }
+        ]
     },
     "scripts": {
         "vscode:prepublish": "npm run package",
