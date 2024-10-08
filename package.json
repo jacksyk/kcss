@@ -5,7 +5,7 @@
     "version": "0.3.4",
     "icon": "image/icon.png",
     "engines": {
-        "vscode": "^1.93.0"
+        "vscode": "^1.2.0"
     },
     "publisher": "shuyikang",
     "categories": [
