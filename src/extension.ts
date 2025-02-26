@@ -12,7 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
         const editor = vscode.window.activeTextEditor
         console.log(editor?.document.languageId)
     
-        const isVueFile = editor?.document.languageId === "plaintext"
+        const isVueFile = editor?.document.languageId === "vue"
         const isReactFile = editor?.document.languageId === "typescriptreact"
         const isPass = isReactFile || isVueFile
 
