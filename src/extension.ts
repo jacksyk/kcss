@@ -1,8 +1,7 @@
 import * as vscode from "vscode"
-import extractClassNames from "./util/extract-class-name"
-import generateLessContent from "./util/generate-less-content"
-import extractImportName from "./util/extract-import-name"
 import getShowToast from "./config/show-toast"
+import { toast } from "./util/toast"
+import { extractReact, extractVue } from "./module"
 import verifyCss from "./util/verify-css"
 import fs from "fs-extra"
 export function activate(context: vscode.ExtensionContext) {
@@ -11,55 +10,25 @@ export function activate(context: vscode.ExtensionContext) {
     // 生成less文件能力
     let disposable = vscode.commands.registerCommand("extension.extractCssClasses", async () => {
         const editor = vscode.window.activeTextEditor
-        const isShowToast = getShowToast()
+        console.log(editor?.document.languageId)
+    
+        const isVueFile = editor?.document.languageId === "plaintext"
+        const isReactFile = editor?.document.languageId === "typescriptreact"
+        const isPass = isReactFile || isVueFile
 
-        if (!editor || editor.document.languageId !== "typescriptreact") {
-            vscode.window.showWarningMessage("请打开一个tsx的文件,目前只支持tsx文件👌👌👌")
-            return
-        }
-        const documentText = editor.document.getText()
-
-        /** 获取当前引用的css module名称 */
-        const [moduleName, suffix] = extractImportName(documentText)
-        const selection = editor.selection
-        const selectedText = editor.document.getText(selection) // 获取当前选中的文本
-        console.log('suffix',suffix)
-
-        if (!moduleName) {
-            vscode.window.showWarningMessage("当前文件没有找到css module文件的代码🥲🥲🥲")
+        if (!editor || !isPass) {
+            toast("请打开一个tsx或者vue的文件,目前只支持Vue、React👌👌👌")
             return
         }
 
-        /** 如果选择了内容，则生成内容那部分，没有选择内容的话，则默认全部生成 */
-        let classNames: string[] = []
-        if (selectedText.length === 0) {
-            classNames = extractClassNames(documentText, moduleName, suffix)
-        } else {
-            classNames = extractClassNames(selectedText, moduleName, suffix)
-        }
-
-        if (classNames.length === 0) {
-            if (isShowToast) {
-                vscode.window.showInformationMessage("less文件中已经存在类名、无需生成😺😺")
-            }
+        if (isReactFile) {
+            await extractReact()
             return
         }
 
-        
-
-        /** 生成less文件内容 */
-        const lessContent = generateLessContent(classNames)
-        /** 生成less文件名称 */
-        const lessFileName = editor.document.fileName.replace(/\.tsx$/, suffix)
-
-        // await vscode.workspace.fs.writeFile(vscode.Uri.file(lessFileName), Buffer.from(lessContent, "utf8"))
-        await fs.writeFile(lessFileName, lessContent, {
-            encoding: "utf8",
-            flag: "a", // 文件追加
-        })
-
-        if (isShowToast) {
-            vscode.window.showInformationMessage(`LESS文件更新完毕🎊🎊🎊`)
+        if (isVueFile) {
+            await extractVue()
+            return
         }
     })
 
@@ -69,7 +38,7 @@ export function activate(context: vscode.ExtensionContext) {
         const isShowToast = getShowToast()
 
         if (!editor || editor.document.languageId !== "less") {
-            vscode.window.showWarningMessage("请打开一个less的文件,目前只支持less文件👌👌👌")
+            toast("请打开一个less的文件,目前只支持less文件👌👌👌")
             return
         }
         const documentText = editor.document.getText()
